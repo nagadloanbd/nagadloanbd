@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>লোনের বিবরণ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { 
+            background: #0f172a; 
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: #ffffff;
+            padding: 30px 20px 50px;
+            text-align: center;
+        }
+        .header h2 { font-size: 22px; margin-bottom: 6px; }
+        .header p { font-size: 13px; opacity: 0.9; }
+        .card-wrap {
+            margin: -30px 16px 20px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            padding: 16px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .banner {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            border-radius: 12px;
+            padding: 18px 10px;
+            display: flex;
+            justify-content: space-around;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .col { flex: 1; }
+        .col:not(:last-child) { border-right: 1px solid rgba(255,255,255,0.2); }
+        .col span { font-size: 11px; opacity: 0.9; display: block; margin-bottom: 5px; }
+        .col strong { font-size: 16px; }
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-bottom: 25px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .schedule-table th {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 10px;
+            text-align: left;
+        }
+        .schedule-table td {
+            padding: 12px 10px;
+            border-top: 1px solid #e2e8f0;
+            color: #1e293b;
+        }
+        .btn-next {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>লোনের সারাংশ</h2>
+        <p>তথ্যগুলো যাচাই করে নিশ্চিত করুন</p>
+    </div>
+
+    <div class="card-wrap">
+        <div class="banner">
+            <div class="col">
+                <span>লোন পরিমাণ</span>
+                <strong id="dispAmount">৳০</strong>
+            </div>
+            <div class="col">
+                <span>মোট চার্জ/মুনাফা</span>
+                <strong id="dispFee">৳০</strong>
+            </div>
+            <div class="col">
+                <span>সর্বমোট দেয়</span>
+                <strong id="dispTotal">৳০</strong>
+            </div>
+        </div>
+
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>কিস্তি</th>
+                    <th>তারিখ</th>
+                    <th style="text-align: right;">পরিমাণ</th>
+                </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+        </table>
+
+        <a id="nextLink" href="./verify.html" class="btn-next">
+            <span>সম্মতি দিন ও এগিয়ে যান</span>
+            <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    </div>
+</div>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get('name') || '';
+    const phone = params.get('phone') || '';
+    const rawAmount = params.get('amount') || '3000';
+    const rawTenure = params.get('tenure') || '3';
+
+    const numAmount = parseInt(rawAmount.replace(/[^0-9]/g, '')) || 3000;
+    const numMonths = parseInt(rawTenure.replace(/[^0-9]/g, '')) || 3;
+
+    const fee = Math.round(numAmount * 0.015 * numMonths);
+    const total = numAmount + fee;
+    const monthly = Math.round(total / numMonths);
+
+    function toBn(num) {
+        const bn = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+        return num.toString().replace(/[0-9]/g, d => bn[d]);
+    }
+
+    document.getElementById('dispAmount').innerText = '৳' + toBn(numAmount.toLocaleString('en-US'));
+    document.getElementById('dispFee').innerText = '৳' + toBn(fee.toLocaleString('en-US'));
+    document.getElementById('dispTotal').innerText = '৳' + toBn(total.toLocaleString('en-US'));
+
+    const tbody = document.getElementById('rows');
+    const today = new Date();
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    for (let i = 1; i <= numMonths; i++) {
+        const d = new Date(today.getFullYear(), today.getMonth() + i, today.getDate());
+        tbody.innerHTML += `
+            <tr>
+                <td>কিস্তি ${toBn(i)}</td>
+                <td>${d.getDate()} ${months[d.getMonth()]}, ${d.getFullYear()}</td>
+                <td style="text-align: right; font-weight: bold; color: #1e3a8a;">৳${toBn(monthly)}</td>
+            </tr>
+        `;
+    }
+
+    document.getElementById('nextLink').href = `./verify.html?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&amount=${encodeURIComponent(rawAmount)}`;
+</script>
+
+</body>
+</html>
