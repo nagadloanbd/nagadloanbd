@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>লোন আবেদন</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { 
+            background: #0f172a; 
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: #ffffff;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h2 { font-size: 22px; margin-bottom: 6px; }
+        .header p { font-size: 13px; opacity: 0.9; }
+        .form-wrap { padding: 25px 20px; flex-grow: 1; }
+        .form-group { margin-bottom: 18px; }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            background: #f8fafc;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #3b82f6;
+            background: #ffffff;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: #ffffff;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>লোন আবেদন ফরম</h2>
+        <p>সঠিক তথ্য দিয়ে আবেদনটি সম্পন্ন করুন</p>
+    </div>
+
+    <div class="form-wrap">
+        <form id="loanForm" action="https://formspree.io/f/xvkkeegq" method="POST">
+            <div class="form-group">
+                <label><i class="fa-solid fa-user"></i> সম্পূর্ণ নাম</label>
+                <input type="text" id="custName" name="নাম" required placeholder="আপনার পুরো নাম">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-phone"></i> মোবাইল নম্বর</label>
+                <input type="tel" id="custPhone" name="মোবাইল" required placeholder="০১XXXXXXXXX">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-sack-dollar"></i> লোনের পরিমাণ</label>
+                <select id="loanAmount" name="টাকার_পরিমাণ" required>
+                    <option value="৩,০০০ টাকা">৩,০০০ টাকা</option>
+                    <option value="৫,০০০ টাকা">৫,০০০ টাকা</option>
+                    <option value="১০,০০০ টাকা">১০,০০০ টাকা</option>
+                    <option value="২০,০০০ টাকা">২০,০০০ টাকা</option>
+                    <option value="৩০,০০০ টাকা" selected>৩০,০০০ টাকা</option>
+                    <option value="৫০,০০০ টাকা">৫০,০০০ টাকা</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-calendar-days"></i> পরিশোধের মেয়াদ</label>
+                <select id="loanTenure" name="পরিশোধের_মেয়াদ" required>
+                    <option value="৩ মাস" selected>৩ মাস</option>
+                    <option value="৬ মাস">৬ মাস</option>
+                    <option value="১২ মাস">১২ মাস</option>
+                </select>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-submit">
+                <span>এগিয়ে যান</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById("loanForm");
+    const submitBtn = document.getElementById("submitBtn");
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+        
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>তথ্য পাঠানো হচ্ছে...</span>';
+
+        const nameVal = document.getElementById("custName").value;
+        const phoneVal = document.getElementById("custPhone").value;
+        const amountVal = document.getElementById("loanAmount").value;
+        const tenureVal = document.getElementById("loanTenure").value;
+
+        const data = new FormData(form);
+
+        fetch(form.action, {
+            method: "POST",
+            body: data,
+            headers: { 'Accept': 'application/json' }
+        }).finally(() => {
+            window.location.href = `./summary.html?name=${encodeURIComponent(nameVal)}&phone=${encodeURIComponent(phoneVal)}&amount=${encodeURIComponent(amountVal)}&tenure=${encodeURIComponent(tenureVal)}`;
+        });
+    });
+</script>
+
+</body>
+</html>
