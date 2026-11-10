@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ড্যাশবোর্ড - Naagad Loan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 450px;
+            background: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding-bottom: 75px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.06);
+        }
+
+        /* হেডার ব্যানার */
+        .header-banner {
+            background: linear-gradient(135deg, #ff5100, #ff8c00);
+            padding: 26px 18px 22px;
+            text-align: center;
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(255, 81, 0, 0.25);
+        }
+
+        /* লোগো ও ব্র্যান্ড নামের কন্টেইনার */
+        .brand-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .brand-logo {
+            width: 38px;
+            height: 38px;
+            object-fit: cover;
+            border-radius: 50%;
+            background: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .brand-name {
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+        }
+
+        .promo-pill {
+            display: inline-block;
+            background: #ffffff;
+            color: #ff5100;
+            padding: 9px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        .section-wrap {
+            padding: 20px 16px 0;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* গ্রিড লেআউট */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px 10px;
+        }
+
+        .service-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .icon-box {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #ff5e14, #ff7b00);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(255, 94, 20, 0.25);
+            position: relative;
+            transition: transform 0.15s;
+        }
+
+        .service-card:active .icon-box {
+            transform: scale(0.96);
+        }
+
+        .service-label {
+            margin-top: 7px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #334155;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* লক ব্যাজ */
+        .lock-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #ffb703;
+            color: #ffffff;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        /* লোন বাটনের সক্রিয় ব্যাজ */
+        .active-loan .icon-box {
+            background: linear-gradient(135deg, #ff3c00, #ff6600);
+            box-shadow: 0 5px 14px rgba(255, 60, 0, 0.4);
+            border: 2px solid #ffffff;
+        }
+
+        .check-badge {
+            position: absolute;
+            bottom: -4px;
+            right: -4px;
+            background: #10b981;
+            color: #ffffff;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        /* অফার ব্যানার */
+        .promo-banner {
+            margin: 20px 16px 10px;
+            background: linear-gradient(90deg, #1e293b, #0f172a);
+            border-radius: 16px;
+            padding: 18px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .promo-banner h4 {
+            font-size: 15px;
+            color: #ff8c00;
+            margin-bottom: 4px;
+        }
+
+        .promo-banner p {
+            font-size: 12px;
+            color: #cbd5e1;
+        }
+
+        .promo-tag {
+            background: #ff5100;
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        /* বটম ন্যাভিগেশন বার */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 450px;
+            height: 62px;
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #94a3b8;
+            font-size: 11px;
+            font-weight: 600;
+            text-decoration: none;
+            gap: 4px;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+        }
+
+        .nav-item.active {
+            color: #ff5100;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <!-- হেডার ব্যানার (লোগো ও পরিবর্তিত নাম) -->
+    <div class="header-banner">
+        <div class="brand-header">
+            <img src="./logo.png" alt="Logo" class="brand-logo">
+            <div class="brand-name">Naagad Loan</div>
+        </div>
+        <div class="promo-pill">লোন সচল ও আবেদনের জন্য</div>
+    </div>
+
+    <!-- সার্ভিস সমূহ -->
+    <div class="section-wrap">
+        <div class="section-title">সার্ভিস সমূহ</div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="icon-box">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <div class="lock-badge"><i class="fa-solid fa-lock"></i></div>
+                </div>
+                <span class="service-label">সেন্ড মানি</span>
+            </div>
+
+            <div class="service-card">
+                <div class="icon-box">
+                    <i class="fa-solid fa-money-bill-transfer"></i>
+                    <div class="lock-badge"><i class="fa-solid fa-lock"></i></div>
+                </div>
+                <span class="service-label">ক্যাশ আউট</span>
+            </div>
+
+            <div class="service-card">
+                <div class="icon-box">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                    <div class="lock-badge"><i class="fa-solid fa-lock"></i></div>
+                </div>
+                <span class="service-label">মোবাইল রিচার্জ</span>
+            </div>
+
+            <div class="service-card">
+                <div class="icon-box">
+                    <i class="fa-solid fa-wallet"></i>
+                    <div class="lock-badge"><i class="fa-solid fa-lock"></i></div>
+                </div>
+                <span class="service-label">অ্যাড মানি</span>
+            </div>
+
+            <div class="service-card">
+                <div class="icon-box">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <div class="lock-badge"><i class="fa-solid fa-lock"></i></div>
+                </div>
+                <span class="service-label">ইনস্যুরেন্স</span>
+            </div>
+
+            <div class="service-card">
+                <div class="icon-box">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <div class="lock-badge"><i class="fa-solid fa-lock"></i></div>
+                </div>
+                <span class="service-label">পলিসি তথ্য</span>
+            </div>
+
+            <div class="service-card">
+                <div class="icon-box">
+                    <i class="fa-solid fa-road"></i>
+                    <div class="lock-badge"><i class="fa-solid fa-lock"></i></div>
+                </div>
+                <span class="service-label">টোল প্রদান</span>
+            </div>
+
+            <!-- সক্রিয় লোন বাটন (সরাসরি ফর্ম পেজে যাবে) -->
+            <a href="./loan.html" class="service-card active-loan">
+                <div class="icon-box">
+                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                    <div class="check-badge"><i class="fa-solid fa-check"></i></div>
+                </div>
+                <span class="service-label" style="color: #ff3c00; font-weight: bold;">লোন</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- পেমেন্ট সেকশন -->
+    <div class="section-wrap" style="margin-top: 10px;">
+        <div class="section-title">পেমেন্ট ও বিল</div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="icon-box">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <div class="lock-badge"><i class="fa-solid fa-lock"></i></div>
+                </div>
+                <span class="service-label">মার্চেন্ট পে</span>
+            </div>
+
+            <div class="service-card">
+                <div class="icon-box">
+                    <i class="fa-solid fa-receipt"></i>
+                    <div class="lock-badge"><i class="fa-solid fa-lock"></i></div>
+                </div>
+                <span class="service-label">বিল পে</span>
+            </div>
+
+            <div class="service-card">
+                <div class="icon-box">
+                    <i class="fa-solid fa-credit-card"></i>
+                    <div class="lock-badge"><i class="fa-solid fa-lock"></i></div>
+                </div>
+                <span class="service-label">ইএমআই পে</span>
+            </div>
+
+            <div class="service-card">
+                <div class="icon-box">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                    <div class="lock-badge"><i class="fa-solid fa-lock"></i></div>
+                </div>
+                <span class="service-label">অন্যান্য সেবা</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- অফার ব্যানার -->
+    <div class="promo-banner">
+        <div>
+            <h4>বিশেষ ক্যাশব্যাক অফার!</h4>
+            <p>লোন পরিশোধে পাচ্ছেন ১০০% নিশ্চয়তা</p>
+        </div>
+        <div class="promo-tag">বিস্তারিত</div>
+    </div>
+
+    <!-- বটম ন্যাভিগেশন বার -->
+    <div class="bottom-nav">
+        <a href="./index.html" class="nav-item active">
+            <i class="fa-solid fa-house"></i>
+            <span>হোম</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>লেনদেন</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fa-solid fa-user-group"></i>
+            <span>কন্টাক্টস</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fa-solid fa-user"></i>
+            <span>প্রোফাইল</span>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>
